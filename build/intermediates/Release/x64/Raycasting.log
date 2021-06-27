@@ -1,0 +1,14 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(476,5): warning MSB8004: Intermediate Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Intermediate Directory.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(477,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  Source.cpp
+C:\Users\jak_h\Desktop\raycasting\Fly-a-ray\Raycasting\deps\yse\include\dsp\buffer.hpp(38,40): warning C4267: 'return': conversion from 'size_t' to 'UInt', possible loss of data
+C:\Users\jak_h\Desktop\raycasting\Fly-a-ray\Raycasting\deps\yse\include\utils\vector.hpp(30,31): warning C4244: 'return': conversion from 'double' to 'Flt', possible loss of data
+C:\Users\jak_h\Desktop\raycasting\Fly-a-ray\Raycasting\deps\yse\include\utils\vector.hpp(99,16): warning C4244: 'return': conversion from 'double' to 'Flt', possible loss of data
+C:\Users\jak_h\Desktop\raycasting\Fly-a-ray\Raycasting\deps\yse\include\music\motif\motifInterface.hpp(47,19): warning C4267: 'return': conversion from 'size_t' to 'UInt', possible loss of data
+  Window.cpp
+C:\Users\jak_h\Desktop\raycasting\Fly-a-ray\Raycasting\deps\yse\include\dsp\buffer.hpp(38,40): warning C4267: 'return': conversion from 'size_t' to 'UInt', possible loss of data
+C:\Users\jak_h\Desktop\raycasting\Fly-a-ray\Raycasting\deps\yse\include\utils\vector.hpp(30,31): warning C4244: 'return': conversion from 'double' to 'Flt', possible loss of data
+C:\Users\jak_h\Desktop\raycasting\Fly-a-ray\Raycasting\deps\yse\include\utils\vector.hpp(99,16): warning C4244: 'return': conversion from 'double' to 'Flt', possible loss of data
+C:\Users\jak_h\Desktop\raycasting\Fly-a-ray\Raycasting\deps\yse\include\music\motif\motifInterface.hpp(47,19): warning C4267: 'return': conversion from 'size_t' to 'UInt', possible loss of data
+C:\Users\jak_h\Desktop\raycasting\Fly-a-ray\Raycasting\src\engine\Window.cpp(205,14): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+LINK : fatal error LNK1181: cannot open input file 'glfw3.lib'

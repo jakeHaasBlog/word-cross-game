@@ -1,0 +1,15 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(476,5): warning MSB8004: Intermediate Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Intermediate Directory.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(477,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  GameLogicInterface.cpp
+C:\Users\jak_h\Desktop\MyFolder\crossword\deps\yse\include\utils\vector.hpp(30,31): warning C4244: 'return': conversion from 'double' to 'Flt', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\deps\yse\include\utils\vector.hpp(99,16): warning C4244: 'return': conversion from 'double' to 'Flt', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\src\game\CrosswordBoard.h(66,18): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\jak_h\Desktop\MyFolder\crossword\src\game\CrosswordBoard.h(67,19): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\jak_h\Desktop\MyFolder\crossword\src\game\GameLogicInterface.cpp(39,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\src\game\GameLogicInterface.cpp(72,194): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\src\game\GameLogicInterface.cpp(72,137): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\src\game\GameLogicInterface.cpp(72,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\src\game\GameLogicInterface.cpp(72,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\src\game\GameLogicInterface.cpp(105,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\src\game\GameLogicInterface.cpp(197,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Raycasting.vcxproj -> C:\Users\jak_h\Desktop\MyFolder\crossword\build\Debug\Win32\Raycasting.exe
