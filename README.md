@@ -10,11 +10,11 @@ The objective of the game is to fit all of the words presented on the left side 
 -- Programming Techniques Demonstrated --
 
 Asynchronous programming using modern threads in c++17
-- The next game board is generated on a slave thread in the background while the user plays the current level, this is done using the modern c++17 thread class provided in the standard library.
+- The reserve game boards are generated on slave threads in the background while the user plays the current board, this is done using the modern c++17 thread class provided in the standard library.
 
 Smart pointers
 - The active and background game boards are tracked using shared pointers provided by the standard template library to ensure safety from dangling pointers and memory leaks while enabling the active board to be easily swapped with the reserve board
-- The slave thread is pointed to using a unique pointer to ensure safety from memory leaks upon deletion and re-initialization.
+- The slave threads are pointed to using unique pointers to ensure safety from memory leaks upon deletion and re-initialization.
 
 Usage of the OpenGL API
 - All graphical aspects of this program were accomplished using modern OpenGL with custom shaders and a variety of c-style buffer object handles.

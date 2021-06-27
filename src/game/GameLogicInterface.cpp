@@ -11,24 +11,30 @@
 namespace {
 
 	std::shared_ptr<CrosswordBoard> activeBoard = std::make_shared<CrosswordBoard>("assets/myWords.txt", 400, 100);
-	std::shared_ptr<CrosswordBoard> reserveBoard = nullptr;
-	bool exiting = false;
 
-	std::unique_ptr<std::thread> boardLoaderThread = nullptr;
+	std::shared_ptr<CrosswordBoard> reserveBoard_easy = nullptr;
+	std::unique_ptr<std::thread> boardLoaderThread_easy = nullptr;
+	ProgressBar pBar_easy = ProgressBar(0, 1000, -0.3f, -0.9f, 0.6f, 0.09f);
+	int softItterations_easy = 400, deepItterations_easy = 500, easyWidth = 20, easyHeight = 20;
 
-	ProgressBar pBar = ProgressBar(0, 1000, -0.3f, -0.9f, 0.6f, 0.09f);
+	std::shared_ptr<CrosswordBoard> reserveBoard_medium = std::make_shared<CrosswordBoard>("assets/myWords.txt", 4000, 1000);
+	std::unique_ptr<std::thread> boardLoaderThread_medium = nullptr;
+	ProgressBar pBar_medium = ProgressBar(0, 1000, -0.3f, -0.9f - 0.09f, 0.6f, 0.09f);
+	int softItterations_medium = 4000, deepItterations_medium = 1000, mediumWidth = 20, mediumHeight = 20;
+	
+	std::shared_ptr<CrosswordBoard> reserveBoard_hard = std::make_shared<CrosswordBoard>("assets/myWords.txt", 40000, 1000);
+	std::unique_ptr<std::thread> boardLoaderThread_hard = nullptr;
+	ProgressBar pBar_hard = ProgressBar(0, 1000, -0.3f, -0.9f - 0.18f, 0.6f, 0.09f);
+	int softItterations_hard = 40000, deepItterations_hard = 1000, hardWidth = 20, hardHeight = 20;
 
-
-	int initialWidth = 20;
-	int initialHeight = 20;
-	int nextSoftRes = 5000;
-	int nextDeepRes = 500;
 
 	float tileWidth = 0.07f;
 	float tileHeight = 0.07f;
 
 	bool winMessageShowing = false;
 	AnimatedSprite winningMessage = AnimatedSprite("assets/merge_from_ofoct_good.jpg");
+
+	bool closeAllThreads = false;
 
 }
 
@@ -43,9 +49,16 @@ void GameLogicInterface::init() {
 
 	activeBoard->tileWidth = tileWidth;
 	activeBoard->tileHeight = tileHeight;
-	activeBoard->reset(initialWidth, initialHeight);
+	activeBoard->reset(easyWidth, easyHeight);
+	boardLoaderThread_easy = std::make_unique<std::thread>(std::thread( loadNewBoard, &reserveBoard_easy, &pBar_easy, softItterations_easy, deepItterations_easy, easyWidth, easyHeight ));
 
-	boardLoaderThread = std::make_unique<std::thread>(loadNewBoard);
+	reserveBoard_medium->tileWidth = tileWidth;
+	reserveBoard_medium->tileHeight = tileHeight;
+	boardLoaderThread_medium = std::make_unique<std::thread>(loadNewBoard, &reserveBoard_medium, &pBar_medium, softItterations_medium, deepItterations_medium, mediumWidth, mediumHeight);
+	
+	reserveBoard_hard->tileWidth = tileWidth;
+	reserveBoard_hard->tileHeight = tileHeight;
+	boardLoaderThread_hard = std::make_unique<std::thread>(loadNewBoard, &reserveBoard_hard, &pBar_hard, softItterations_hard, deepItterations_hard, hardWidth, hardHeight);
 
 	int xi = 0;
 	int yi = 0;
@@ -105,24 +118,30 @@ void GameLogicInterface::update(float deltaTime)
 		winningMessage.render(totalTime);
 	}
 
-	pBar.setSize(activeBoard->tileWidth * activeBoard->tilesWide, 0.05f);
-	pBar.setPosition(activeBoard->getTileRenderX(0), activeBoard->getTileRenderY(0) - (pBar.getHeight() * 2.5f));
-	pBar.render();
+	pBar_easy.setSize(activeBoard->tileWidth * activeBoard->tilesWide, 0.05f);
+	pBar_easy.setPosition(activeBoard->getTileRenderX(0), activeBoard->getTileRenderY(0) - (pBar_easy.getHeight() * 2.5f));
+	pBar_easy.render();
 
-	if (pBar.getCurrent() >= pBar.getMax()) {
-		boardLoaderThread.release();
-		boardLoaderThread = nullptr;
-	}
+	pBar_medium.setSize(activeBoard->tileWidth * activeBoard->tilesWide, 0.05f);
+	pBar_medium.setPosition(activeBoard->getTileRenderX(0), activeBoard->getTileRenderY(0) - (pBar_medium.getHeight() * 3.5f));
+	pBar_medium.render();
+	
+	pBar_hard.setSize(activeBoard->tileWidth * activeBoard->tilesWide, 0.05f);
+	pBar_hard.setPosition(activeBoard->getTileRenderX(0), activeBoard->getTileRenderY(0) - (pBar_hard.getHeight() * 4.5f));
+	pBar_hard.render();
 }
 
 void GameLogicInterface::cleanup() {
-	exiting = true;
+	closeAllThreads = true;
 
-	boardLoaderThread.release();
-	//boardLoaderThread.get()->detach();
-	//boardLoaderThread = nullptr;
+	boardLoaderThread_easy->join();
+	boardLoaderThread_medium->join();
+	boardLoaderThread_hard->join();
+
 	activeBoard = nullptr;
-	reserveBoard = nullptr;
+	reserveBoard_easy = nullptr;
+	reserveBoard_medium = nullptr;
+	reserveBoard_hard = nullptr;
 }
 
 void GameLogicInterface::mouseMoveCallback(double xPos, double yPos)
@@ -143,40 +162,78 @@ void GameLogicInterface::keyCallback(int key, int scancode, int action, int mods
 {
 	static bool wasWinningLastFrame = false;
 
-	if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
+	if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
 
-		if (pBar.getCurrent() == pBar.getMax()) {
-			if (boardLoaderThread) boardLoaderThread->join();
-			boardLoaderThread = nullptr;
-
-			activeBoard = reserveBoard;
-			reserveBoard = nullptr;
-
-			boardLoaderThread = std::make_unique<std::thread>(loadNewBoard);
-
+		if (pBar_easy.getCurrent() == pBar_easy.getMax()) {
+			if (boardLoaderThread_easy) boardLoaderThread_easy->join();
+			boardLoaderThread_easy = nullptr;
+		
+			activeBoard = reserveBoard_easy;
+			reserveBoard_easy = nullptr;
+		
+			boardLoaderThread_easy = std::make_unique<std::thread>(std::thread{ loadNewBoard, &reserveBoard_easy, &pBar_easy, softItterations_easy, deepItterations_easy, easyWidth, easyHeight });
+		
+		
 			winMessageShowing = false;
 			wasWinningLastFrame = false;
 		}
 
 	}
 
+	else if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
 	
-	int mouseoverIndex = activeBoard->getTileAt(window.getMouseX(), window.getMouseY());
-	if (mouseoverIndex != -1) {
-		if (activeBoard->getTile(mouseoverIndex).correctLetter != '\0' && !activeBoard->getTile(mouseoverIndex).locked) {
-			char input = key + 32;
+		if (pBar_medium.getCurrent() == pBar_medium.getMax()) {
+			if (boardLoaderThread_medium) boardLoaderThread_medium->join();
+			boardLoaderThread_medium = nullptr;
+	
+			activeBoard = reserveBoard_medium;
+			reserveBoard_medium = nullptr;
+	
+			boardLoaderThread_medium = std::make_unique<std::thread>(loadNewBoard, &reserveBoard_medium, &pBar_medium, softItterations_medium, deepItterations_medium, mediumWidth, mediumHeight);
+			
+			winMessageShowing = false;
+			wasWinningLastFrame = false;
+		}
+	
+	}
+	
+	else if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
+	
+		if (pBar_hard.getCurrent() == pBar_hard.getMax()) {
+			if (boardLoaderThread_hard) boardLoaderThread_hard->join();
+			boardLoaderThread_hard = nullptr;
+	
+			activeBoard = reserveBoard_hard;
+			reserveBoard_hard = nullptr;
+	
+			boardLoaderThread_hard = std::make_unique<std::thread>(loadNewBoard, &reserveBoard_hard, &pBar_hard, softItterations_hard, deepItterations_hard, hardWidth, hardHeight);
+	
+			winMessageShowing = false;
+			wasWinningLastFrame = false;
+		}
+	
+	}
 
-			if (97 <= input && input <= 122) {
-				activeBoard->getTile(mouseoverIndex).currentLetter = input;
-				activeBoard->resetCrossedWordsList();
-			}
-			else {
-				if (key == GLFW_KEY_BACKSPACE) {
-					activeBoard->getTile(mouseoverIndex).currentLetter = ' ';
+	else {
+
+		int mouseoverIndex = activeBoard->getTileAt(window.getMouseX(), window.getMouseY());
+		if (mouseoverIndex != -1) {
+			if (activeBoard->getTile(mouseoverIndex).correctLetter != '\0' && !activeBoard->getTile(mouseoverIndex).locked) {
+				char input = key + 32;
+
+				if (97 <= input && input <= 122) {
+					activeBoard->getTile(mouseoverIndex).currentLetter = input;
 					activeBoard->resetCrossedWordsList();
+				}
+				else {
+					if (key == GLFW_KEY_BACKSPACE) {
+						activeBoard->getTile(mouseoverIndex).currentLetter = ' ';
+						activeBoard->resetCrossedWordsList();
+					}
 				}
 			}
 		}
+
 	}
 
 	if (!wasWinningLastFrame) {
@@ -192,30 +249,30 @@ void GameLogicInterface::characterCallback(unsigned int codepoint)
 {
 }
 
-void GameLogicInterface::loadNewBoard()
+void GameLogicInterface::loadNewBoard(std::shared_ptr<CrosswordBoard>* board, ProgressBar* pBar, int softItterations, int deepItterations, int width, int height)
 {
 	srand(time(NULL));
 
-	reserveBoard = std::make_shared<CrosswordBoard>("assets/myWords.txt", nextSoftRes, nextDeepRes);
-	reserveBoard->tilesWide = initialWidth;
-	reserveBoard->tilesTall = initialHeight;
-	reserveBoard->tileWidth = tileWidth;
-	reserveBoard->tileHeight = tileHeight;
+	*board = std::make_shared<CrosswordBoard>("assets/myWords.txt", softItterations, deepItterations);
+	(*board)->tilesWide = width;
+	(*board)->tilesTall = height;
+	(*board)->tileWidth = tileWidth;
+	(*board)->tileHeight = tileHeight;
+	
+	(*board)->initPartialReset();
 
-	reserveBoard->initPartialReset();
+	*pBar = ProgressBar(0, softItterations, pBar->getX(), pBar->getY(), pBar->getWidth(), pBar->getHeight());
 
-	pBar = ProgressBar(0, nextSoftRes, pBar.getX(), pBar.getY(), pBar.getWidth(), pBar.getHeight());
+	int itterationsPerLoop = 100;
+	for (int i = 0; i < softItterations / itterationsPerLoop; i++) {
 
-	int itterationsPerLoop = 500;
-	for (int i = 0; i < nextSoftRes / itterationsPerLoop; i++) {
-		
-		if (exiting) return;
+		if (closeAllThreads) return;
 
-		reserveBoard->partialReset(itterationsPerLoop);
-		pBar.setCurrent(i * itterationsPerLoop);
+		(*board)->partialReset(itterationsPerLoop);
+		pBar->setCurrent(i * itterationsPerLoop);
 	}
 
-	reserveBoard->finalizePartialReset();
-	pBar.setCurrent(pBar.getMax());
+	(*board)->finalizePartialReset();
+	pBar->setCurrent(pBar->getMax());
 
 }

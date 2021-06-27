@@ -19,6 +19,9 @@
 #include "engine/ExistentialDictionary.h"
 
 #include "game/CrosswordBoard.h"
+#include "game/ProgressBar.h"
+#include <memory>
+#include <thread>
 
 namespace GameLogicInterface {
 	void init();
@@ -30,6 +33,6 @@ namespace GameLogicInterface {
 	void keyCallback(int key, int scancode, int action, int mods);
 	void characterCallback(unsigned int codepoint);
 
-	void loadNewBoard();
+	static void loadNewBoard(std::shared_ptr<CrosswordBoard>* board, ProgressBar* pBar, int softItterations, int deepItterations, int width, int height);
 
 };
