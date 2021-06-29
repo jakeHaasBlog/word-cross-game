@@ -91,6 +91,9 @@
     <ClCompile Include="src\game\ProgressBar.cpp">
       <Filter>Source Files\game</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\Button.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\game\GameLogicInterface.h">
@@ -151,6 +154,9 @@
       <Filter>Source Files\game</Filter>
     </ClInclude>
     <ClInclude Include="src\game\ProgressBar.h">
+      <Filter>Source Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\Button.h">
       <Filter>Source Files\game</Filter>
     </ClInclude>
   </ItemGroup>

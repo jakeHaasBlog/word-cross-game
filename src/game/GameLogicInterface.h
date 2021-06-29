@@ -17,6 +17,7 @@
 #include "engine/BitmapText.h"
 #include "engine/TextureManager.h"
 #include "engine/ExistentialDictionary.h"
+#include "game/Button.h"
 
 #include "game/CrosswordBoard.h"
 #include "game/ProgressBar.h"

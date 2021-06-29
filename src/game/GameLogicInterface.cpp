@@ -36,6 +36,15 @@ namespace {
 
 	bool closeAllThreads = false;
 
+	Button button_easy = Button(0, 0, 1, 1, []() {
+		
+	});
+	Button button_medium = Button(0, 0, 1, 1, []() {
+
+	});
+	Button button_hard = Button(0, 0, 1, 1, []() {
+
+	});
 }
 
 void GameLogicInterface::init() {

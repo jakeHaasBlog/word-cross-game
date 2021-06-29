@@ -37,6 +37,7 @@
     <ClCompile Include="src\engine\TextureManager.cpp" />
     <ClCompile Include="src\engine\ViewportManager.cpp" />
     <ClCompile Include="src\engine\Window.cpp" />
+    <ClCompile Include="src\game\Button.cpp" />
     <ClCompile Include="src\game\CrosswordBoard.cpp" />
     <ClCompile Include="src\game\GameLogicInterface.cpp" />
     <ClCompile Include="src\game\ProgressBar.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="src\engine\TextureManager.h" />
     <ClInclude Include="src\engine\ViewportManager.h" />
     <ClInclude Include="src\engine\Window.h" />
+    <ClInclude Include="src\game\Button.h" />
     <ClInclude Include="src\game\CrosswordBoard.h" />
     <ClInclude Include="src\game\GameLogicInterface.h" />
     <ClInclude Include="src\game\ProgressBar.h" />
