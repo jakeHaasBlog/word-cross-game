@@ -20,6 +20,15 @@ public:
 	void setTextXOffset(float x);
 	float getXOffset();
 
+	void setTextHeight(float height);
+	float getTextHeight();
+
+	void setForegroundColor(float r, float g, float b, float a = 1.0f);
+	void setBackgroundColor(float r, float g, float b, float a = 1.0f);
+
+	void setPrompt(const std::string& prompt);
+	std::string getPrompt();
+
 	void setTextYOffset(float y);
 	float getYOffset();
 
@@ -44,4 +53,5 @@ private:
 	float buttonTextXOffset = 0.0f;
 	float buttonTextYOffset = 0.0f;
 
+	bool isDown = false;
 };

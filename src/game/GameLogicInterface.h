@@ -34,6 +34,10 @@ namespace GameLogicInterface {
 	void keyCallback(int key, int scancode, int action, int mods);
 	void characterCallback(unsigned int codepoint);
 
+	static void swapActiveWithReserve_easy();
+	static void swapActiveWithReserve_medium();
+	static void swapActiveWithReserve_hard();
+
 	static void loadNewBoard(std::shared_ptr<CrosswordBoard>* board, ProgressBar* pBar, int softItterations, int deepItterations, int width, int height);
 
 };

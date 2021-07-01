@@ -1,11 +1,22 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(476,5): warning MSB8004: Intermediate Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Intermediate Directory.
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(477,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  Button.cpp
+  GameLogicInterface.cpp
+C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\deps\yse\include\utils\vector.hpp(30,31): warning C4244: 'return': conversion from 'double' to 'Flt', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\deps\yse\include\utils\vector.hpp(99,16): warning C4244: 'return': conversion from 'double' to 'Flt', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\src\game\CrosswordBoard.h(66,18): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\src\game\CrosswordBoard.h(67,19): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\src\game\GameLogicInterface.cpp(50,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\src\game\GameLogicInterface.cpp(107,194): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\src\game\GameLogicInterface.cpp(107,137): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\src\game\GameLogicInterface.cpp(107,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\src\game\GameLogicInterface.cpp(107,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\src\game\GameLogicInterface.cpp(139,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\src\game\GameLogicInterface.cpp(283,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  91 of 1766 functions ( 5.2%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    25 functions had inline decision re-evaluated but remain unchanged
+  2 of 1820 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    9 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\build\Release\Win32\vc120.pdb'; linking object as if no debug info
+glew32s.lib(glew.obj) : warning LNK4099: PDB '' was not found with 'glew32s.lib(glew.obj)' or at ''; linking object as if no debug info
   Raycasting.vcxproj -> C:\Users\jak_h\Desktop\MyFolder\crossword\word-cross-game\build\Release\Win32\Raycasting.exe

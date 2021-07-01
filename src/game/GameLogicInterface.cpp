@@ -36,15 +36,11 @@ namespace {
 
 	bool closeAllThreads = false;
 
-	Button button_easy = Button(0, 0, 1, 1, []() {
-		
-	});
-	Button button_medium = Button(0, 0, 1, 1, []() {
+	Button button_easy = Button(0, 0, 1, 1, GameLogicInterface::swapActiveWithReserve_easy);
+	Button button_medium = Button(0, 0, 1, 1, GameLogicInterface::swapActiveWithReserve_medium);
+	Button button_hard = Button(0, 0, 1, 1, GameLogicInterface::swapActiveWithReserve_hard);
 
-	});
-	Button button_hard = Button(0, 0, 1, 1, []() {
-
-	});
+	bool wasWinningLastFrame = false;
 }
 
 void GameLogicInterface::init() {
@@ -84,6 +80,23 @@ void GameLogicInterface::init() {
 		winningMessage.addFrame(0.06f, x, y, 480, 384);
 	}
 
+	button_easy.setPrompt("easy");
+	button_easy.setTextHeight(0.06f);
+	button_easy.setTextXOffset(0.05f);
+	button_easy.setForegroundColor(0, 0.7f, 0);
+	button_easy.setBackgroundColor(0, 0.0f, 0);
+
+	button_medium.setPrompt("medium");
+	button_medium.setTextHeight(0.05f);
+	button_medium.setTextXOffset(0.04f);
+	button_medium.setForegroundColor(0.7f, 0.7f, 0);
+	button_medium.setBackgroundColor(0, 0.0f, 0);
+
+	button_hard.setPrompt("hard");
+	button_hard.setTextHeight(0.05f);
+	button_hard.setTextXOffset(0.06f);
+	button_hard.setForegroundColor(0.7f, 0.0f, 0);
+	button_hard.setBackgroundColor(0, 0.0f, 0);
 }
 
 void GameLogicInterface::update(float deltaTime)
@@ -130,14 +143,23 @@ void GameLogicInterface::update(float deltaTime)
 	pBar_easy.setSize(activeBoard->tileWidth * activeBoard->tilesWide, 0.05f);
 	pBar_easy.setPosition(activeBoard->getTileRenderX(0), activeBoard->getTileRenderY(0) - (pBar_easy.getHeight() * 2.5f));
 	pBar_easy.render();
+	button_easy.setPosition(pBar_easy.getX() + pBar_easy.getWidth(), pBar_easy.getY());
+	button_easy.setSize(0.2f, pBar_easy.getHeight());
+	button_easy.render();
 
 	pBar_medium.setSize(activeBoard->tileWidth * activeBoard->tilesWide, 0.05f);
 	pBar_medium.setPosition(activeBoard->getTileRenderX(0), activeBoard->getTileRenderY(0) - (pBar_medium.getHeight() * 3.5f));
 	pBar_medium.render();
-	
+	button_medium.setPosition(pBar_medium.getX() + pBar_medium.getWidth(), pBar_medium.getY());
+	button_medium.setSize(0.2f, pBar_medium.getHeight());
+	button_medium.render();
+
 	pBar_hard.setSize(activeBoard->tileWidth * activeBoard->tilesWide, 0.05f);
 	pBar_hard.setPosition(activeBoard->getTileRenderX(0), activeBoard->getTileRenderY(0) - (pBar_hard.getHeight() * 4.5f));
 	pBar_hard.render();
+	button_hard.setPosition(pBar_hard.getX() + pBar_hard.getWidth(), pBar_hard.getY());
+	button_hard.setSize(0.2f, pBar_hard.getHeight());
+	button_hard.render();
 }
 
 void GameLogicInterface::cleanup() {
@@ -165,85 +187,33 @@ void GameLogicInterface::mouseButtonCallback(int button, int action, int mods)
 			winMessageShowing = !winMessageShowing;
 		}
 	}
+
+	button_easy.mouseListener(window.getMouseX(), window.getMouseY(), button, action, mods);
+	button_medium.mouseListener(window.getMouseX(), window.getMouseY(), button, action, mods);
+	button_hard.mouseListener(window.getMouseX(), window.getMouseY(), button, action, mods);
 }
 
 void GameLogicInterface::keyCallback(int key, int scancode, int action, int mods)
 {
-	static bool wasWinningLastFrame = false;
 
-	if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
+	int mouseoverIndex = activeBoard->getTileAt(window.getMouseX(), window.getMouseY());
+	if (mouseoverIndex != -1) {
+		if (activeBoard->getTile(mouseoverIndex).correctLetter != '\0' && !activeBoard->getTile(mouseoverIndex).locked) {
+			char input = key + 32;
 
-		if (pBar_easy.getCurrent() == pBar_easy.getMax()) {
-			if (boardLoaderThread_easy) boardLoaderThread_easy->join();
-			boardLoaderThread_easy = nullptr;
-		
-			activeBoard = reserveBoard_easy;
-			reserveBoard_easy = nullptr;
-		
-			boardLoaderThread_easy = std::make_unique<std::thread>(std::thread{ loadNewBoard, &reserveBoard_easy, &pBar_easy, softItterations_easy, deepItterations_easy, easyWidth, easyHeight });
-		
-		
-			winMessageShowing = false;
-			wasWinningLastFrame = false;
-		}
-
-	}
-
-	else if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
-	
-		if (pBar_medium.getCurrent() == pBar_medium.getMax()) {
-			if (boardLoaderThread_medium) boardLoaderThread_medium->join();
-			boardLoaderThread_medium = nullptr;
-	
-			activeBoard = reserveBoard_medium;
-			reserveBoard_medium = nullptr;
-	
-			boardLoaderThread_medium = std::make_unique<std::thread>(loadNewBoard, &reserveBoard_medium, &pBar_medium, softItterations_medium, deepItterations_medium, mediumWidth, mediumHeight);
-			
-			winMessageShowing = false;
-			wasWinningLastFrame = false;
-		}
-	
-	}
-	
-	else if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
-	
-		if (pBar_hard.getCurrent() == pBar_hard.getMax()) {
-			if (boardLoaderThread_hard) boardLoaderThread_hard->join();
-			boardLoaderThread_hard = nullptr;
-	
-			activeBoard = reserveBoard_hard;
-			reserveBoard_hard = nullptr;
-	
-			boardLoaderThread_hard = std::make_unique<std::thread>(loadNewBoard, &reserveBoard_hard, &pBar_hard, softItterations_hard, deepItterations_hard, hardWidth, hardHeight);
-	
-			winMessageShowing = false;
-			wasWinningLastFrame = false;
-		}
-	
-	}
-
-	else {
-
-		int mouseoverIndex = activeBoard->getTileAt(window.getMouseX(), window.getMouseY());
-		if (mouseoverIndex != -1) {
-			if (activeBoard->getTile(mouseoverIndex).correctLetter != '\0' && !activeBoard->getTile(mouseoverIndex).locked) {
-				char input = key + 32;
-
-				if (97 <= input && input <= 122) {
-					activeBoard->getTile(mouseoverIndex).currentLetter = input;
+			if (97 <= input && input <= 122) {
+				activeBoard->getTile(mouseoverIndex).currentLetter = input;
+				activeBoard->resetCrossedWordsList();
+			}
+			else {
+				if (key == GLFW_KEY_BACKSPACE) {
+					activeBoard->getTile(mouseoverIndex).currentLetter = ' ';
 					activeBoard->resetCrossedWordsList();
-				}
-				else {
-					if (key == GLFW_KEY_BACKSPACE) {
-						activeBoard->getTile(mouseoverIndex).currentLetter = ' ';
-						activeBoard->resetCrossedWordsList();
-					}
 				}
 			}
 		}
-
 	}
+
 
 	if (!wasWinningLastFrame) {
 		if (activeBoard->checkWin()) {
@@ -256,6 +226,55 @@ void GameLogicInterface::keyCallback(int key, int scancode, int action, int mods
 
 void GameLogicInterface::characterCallback(unsigned int codepoint)
 {
+}
+
+void GameLogicInterface::swapActiveWithReserve_easy()
+{
+	if (pBar_easy.getCurrent() == pBar_easy.getMax()) {
+		if (boardLoaderThread_easy) boardLoaderThread_easy->join();
+		boardLoaderThread_easy = nullptr;
+
+		activeBoard = reserveBoard_easy;
+		reserveBoard_easy = nullptr;
+
+		boardLoaderThread_easy = std::make_unique<std::thread>(std::thread{ loadNewBoard, &reserveBoard_easy, &pBar_easy, softItterations_easy, deepItterations_easy, easyWidth, easyHeight });
+
+
+		winMessageShowing = false;
+		wasWinningLastFrame = false;
+	}
+}
+
+void GameLogicInterface::swapActiveWithReserve_medium()
+{
+	if (pBar_medium.getCurrent() == pBar_medium.getMax()) {
+		if (boardLoaderThread_medium) boardLoaderThread_medium->join();
+		boardLoaderThread_medium = nullptr;
+
+		activeBoard = reserveBoard_medium;
+		reserveBoard_medium = nullptr;
+
+		boardLoaderThread_medium = std::make_unique<std::thread>(loadNewBoard, &reserveBoard_medium, &pBar_medium, softItterations_medium, deepItterations_medium, mediumWidth, mediumHeight);
+
+		winMessageShowing = false;
+		wasWinningLastFrame = false;
+	}
+}
+
+void GameLogicInterface::swapActiveWithReserve_hard()
+{
+	if (pBar_medium.getCurrent() == pBar_medium.getMax()) {
+		if (boardLoaderThread_hard) boardLoaderThread_hard->join();
+		boardLoaderThread_hard = nullptr;
+
+		activeBoard = reserveBoard_hard;
+		reserveBoard_hard = nullptr;
+
+		boardLoaderThread_hard = std::make_unique<std::thread>(loadNewBoard, &reserveBoard_hard, &pBar_hard, softItterations_hard, deepItterations_hard, hardWidth, hardHeight);
+
+		winMessageShowing = false;
+		wasWinningLastFrame = false;
+	}
 }
 
 void GameLogicInterface::loadNewBoard(std::shared_ptr<CrosswordBoard>* board, ProgressBar* pBar, int softItterations, int deepItterations, int width, int height)

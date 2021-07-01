@@ -61,14 +61,44 @@ void Button::setTextYOffset(float y)
 	buttonTextYOffset = y;
 }
 
+void Button::setPrompt(const std::string& prompt)
+{
+	buttonText = prompt;
+}
+
+void Button::setTextHeight(float height)
+{
+	buttonTextSize = height;
+}
+
 float Button::getYOffset()
 {
 	buttonTextYOffset;
 }
 
+std::string Button::getPrompt()
+{
+	return buttonText;
+}
+
+float Button::getTextHeight()
+{
+	return buttonTextSize;
+}
+
 void Button::setPressFunction(const std::function<void()>& function)
 {
 	this->buttonFunction = function;
+}
+
+void Button::setForegroundColor(float r, float g, float b, float a)
+{
+	fg_color = { r, g, b, a };
+}
+
+void Button::setBackgroundColor(float r, float g, float b, float a)
+{
+	bg_color = { r, g, b, a };
 }
 
 void Button::press()
@@ -78,16 +108,33 @@ void Button::press()
 
 void Button::mouseListener(float x, float y, int button, int action, int mods)
 {
-	Geo::Rectangle rect = Geo::Rectangle(this->x, this->y, width, height);
+	Geo::Rectangle rect = Geo::Rectangle(this->x, this->y + height, width, height);
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
 		if (rect.containsPoint(x, y)) {
 			press();
 		}
+
+		isDown = false;
 	}
+
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+		if (rect.containsPoint(x, y)) {
+			isDown = true;
+		}
+	}
+
 }
 
 void Button::render()
 {
+	auto preFGcolor = fg_color;
+	auto preBGcolor = bg_color;
+
+	if (isDown) {
+		for (float& c : fg_color) c /= 2;
+		for (float& c : bg_color) c /= 2;
+	}
+
 	float borderWidth = 0.01f;
 	Geo::Rectangle::fillRect(x, y, width, height, fg_color[0], fg_color[1], fg_color[2], fg_color[3]);
 	Geo::Rectangle::fillRect(x + borderWidth, y + borderWidth, width - borderWidth * 2, height - borderWidth * 2, bg_color[0], bg_color[1], bg_color[2], bg_color[3]);
@@ -101,5 +148,8 @@ void Button::render()
 		text.setPosition({ x + buttonTextXOffset, y + buttonTextYOffset });
 		text.render();
 	}
+
+	fg_color = preFGcolor;
+	bg_color = preBGcolor;
 	
 }
